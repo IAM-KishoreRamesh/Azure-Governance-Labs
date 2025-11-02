@@ -84,15 +84,6 @@ The **Storage Blob Data Reader** role grants access to the **data plane** only f
 
 ---
 
-## 🧩 F. (Optional) Elevate Access
-
-To verify full access:
-- Assigned **Storage Blob Data Contributor** to `User1` at the container scope.
-- Waited 5–10 minutes for RBAC propagation.
-- Retested upload/delete — ✅ success.
-
----
-
 ## ⚙️ Understanding the Issue: Management Plane vs Data Plane
 
 | Type | Description | Controlled by | Example Actions | Role Examples |
