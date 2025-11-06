@@ -1,33 +1,57 @@
-# Day-03 — Azure Tags & Resource Locks Lab (Portal Only)
+# Day-03 — Azure Tags & Resource Locks Lab
 
 ## 🎯 Objective
-Establish governance controls by:
-- Applying **Tags** for cost & ownership tracking
+Implement foundational **governance controls** in Azure by:
+- Applying **standardized Tags** for **cost allocation** and **resource ownership**
 - Using **Resource Locks** to prevent accidental deletion or modification
-- Verifying that **tags do NOT inherit** down the resource hierarchy
+- Demonstrating that **tags do NOT inherit** automatically between resources
 
 ---
 
 ## 🧱 Lab Setup Architecture
 
-RG-Governance-Lab
-| Resource | Name |
-|--------|-------|
-| Blob Container | testcontainer1 |
-| Storage Account | stgovlab12345 |
+| Resource Type     | Name              |
+|------------------|------------------|
+| Resource Group    | RG-Governance-Lab |
+| Storage Account   | stgovlab          |
+| Blob Container    | testcontainer1    |
 
+---
+
+## 🏛️ Tag Standardization Policy (Governance Justification)
+
+In enterprise cloud environments, **resource tags follow a defined standard** to support:
+
+| Purpose | Description |
+|--------|-------------|
+| **Cost Allocation** | Enables showback/chargeback reporting. |
+| **Ownership Tracking** | Identifies accountability for incidents and lifecycle. |
+| **Automation & Lifecycle Management** | Enables automated cleanup, expiry workflows, and monitoring. |
+| **Security & Compliance Auditing** | Supports policy rules for data classification and controls. |
+
+### Recommended Tag Schema
+
+| Tag Name         | Description | Example Value |
+|------------------|-------------|---------------|
+| **Owner**        | Person/team responsible | `kishore.ramesh@company.com` |
+| **Environment**  | Deployment stage | `Dev`, `Test`, `Prod` |
+| **CostCenter**   | Financial tracking unit | `GOV001` |
+| **Project**      | Project / System name | `AzureGovernanceLabs` |
+| **DataSensitivity** | Security classification | `Internal`, `Confidential` |
 
 ---
 
 ## 1️⃣ Create Resource Group
+
 | Setting | Value |
 |--------|-------|
-| Name | `RG-Governance-Lab` |
+| Name   | `RG-Governance-Lab` |
 | Region | Central India |
 
 ---
 
 ## 2️⃣ Create Storage Account
+
 | Setting | Value |
 |--------|-------|
 | Name | `stgovlab12345` *(must be unique)* |
@@ -49,59 +73,74 @@ RG-Governance-Lab
 | Project | AzureGovernanceLabs |
 
 ### Tags applied to **Storage Account**
-> Same tags applied **manually** (to illustrate tags do not auto-inherit)
+(Re-applied manually to demonstrate tag inheritance does **not** happen automatically)
 
 ---
 
 ## 4️⃣ Tag Inheritance Verification
-- Created Blob Container `testcontainer1`
-- Checked **Tags** → **No tags present**
 
-✅ **Conclusion:**  
-Azure **does not automatically inherit tags** from RG → requires **Azure Policy** to enforce.
+- Created **Blob Container**: `testcontainer1`
+- Navigated to the container settings → **No Tags**
+
+✅ **Result:**  
+**Azure does not auto-inherit tags** to child resources.  
+This must be enforced using **Azure Policy**.
+
+> Note: Blob Containers **do not support tags**. They only support **Metadata**, which is not used for cost/ownership governance.
 
 ---
 
 ## 5️⃣ Apply Resource Locks
 
-### A) Delete Lock (at Resource Group Level)
+### A) Delete Lock (at Resource Group level)
+
 | Setting | Value |
 |--------|-------|
 | Lock Name | `Lock-NoDelete-RG` |
 | Lock Type | Delete |
-| Scope | Resource Group |
+| Scope | `RG-Governance-Lab` |
 
-**Test:**  
-Tried deleting the Storage Account → **Deletion blocked** ✅
+**Test:** Attempt to delete Storage Account → **Deletion blocked** ✅
 
 ---
 
-### B) ReadOnly Lock (on Storage Account)
+### B) ReadOnly Lock (at Storage Account level)
+
 | Setting | Value |
 |--------|-------|
 | Lock Name | `Lock-RO-Storage` |
 | Lock Type | ReadOnly |
-| Scope | Storage Account |
+| Scope | `stgovlab12345` |
 
-**Test:**  
-Tried creating a new blob container → **Modification blocked** ✅
+**Test:** Attempt to create Blob Container → **Modification blocked** ✅
 
 ---
 
 ## 6️⃣ Cleanup (Optional)
+
 | Action | Reason |
 |--------|--------|
-| Remove `Lock-NoDelete-RG` | Allows future labs |
-| Remove `Lock-RO-Storage` | Allows standard storage usage |
+| Remove `Lock-NoDelete-RG` | Allows future resource deletion |
+| Remove `Lock-RO-Storage` | Restores normal storage operations |
 
 ---
 
 ## 🧠 Key Takeaways
+
 | Concept | Meaning | Notes |
 |--------|---------|------|
-| Tags | Metadata for cost/ownership tracking | Must be enforced with Policy |
-| Delete Lock | Prevents deletion | Useful for production workloads |
-| ReadOnly Lock | Prevents deletion & modification | Stronger lock; use carefully |
-| Tag Inheritance | Not automatic | Needs Azure Policy |
+| Tags | Identify ownership, cost, and governance | Must be enforced using **Azure Policy** |
+| Delete Lock | Prevents deletion actions | Useful for production resource protection |
+| ReadOnly Lock | Prevents creation, modification, deletion | Use carefully — stops operational changes |
+| Tag Inheritance | **Not automatic** in Azure | Policy-based enforcement is required |
+| Blob Container Tags | Containers **do not support tags** | They use **Metadata**, not cost governance tags |
 
 ---
+
+## ✅ Summary
+This lab demonstrates how to:
+- Apply and standardize tags across Azure resources
+- Prevent accidental resource modification using locks
+- Validate that tags **must be enforced**, not assumed
+
+**This is foundational for any real-world Azure Governance model.**
