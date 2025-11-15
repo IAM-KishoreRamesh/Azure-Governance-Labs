@@ -65,7 +65,8 @@ Build a complete **Azure Governance Portfolio** — showcasing:
 ✅ **Day-01: Azure Resource Hierarchy — Completed**  
 ✅ **Day-02: Role Based Access Control (RBAC) — Completed**  
 ✅ **Day-03: Resource Tags and Locks - Completed**  
-🟡 **Day-04: Azure Policy - Pending**
+✅ **Day-04: Azure Policy (Azure Policy Tag Enforcement)**
+✅ **Day-05: Azure Policy (Azure Policy AutoTag Enforcement)**
 
 ---
 
